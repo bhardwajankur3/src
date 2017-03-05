@@ -221,6 +221,13 @@ public class TupleUtils
 	    throw new TupleUtilsException(e, "FieldNumberOutOfBoundException is caught by TupleUtils.java");
 	  }
 	  break;
+  case AttrType.attrDesc:
+    try {
+      value.setDescFld(fld_no, tuple.getDescFld(fld_no));
+    }catch (FieldNumberOutOfBoundException e){
+      throw new TupleUtilsException(e, "FieldNumberOutOfBoundException is caught by TupleUtils.java");
+    }
+    break;
 	default:
 	  throw new UnknowAttrType(null, "Don't know how to handle attrSymbol, attrNull");
 	  
