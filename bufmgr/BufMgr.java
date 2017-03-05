@@ -330,7 +330,9 @@ public class BufMgr implements GlobalConst{
   
   /** The replacer object, which is only used in this class. */
   private Replacer replacer;
-  
+
+  /** The pcounter object, which is only used in this class. */
+  private PCounter counter;
   
   /** Factor out the common code for the two versions of Flush 
    *
@@ -817,6 +819,7 @@ public class BufMgr implements GlobalConst{
     
     try {
       SystemDefs.JavabaseDB.write_page(pageno, page);
+      pcounter.writeIncrement();
     }
     catch (Exception e) {
       throw new BufMgrException(e,"BufMgr.java: write_page() failed");
@@ -829,6 +832,7 @@ public class BufMgr implements GlobalConst{
     
     try {
       SystemDefs.JavabaseDB.read_page(pageno, page);
+      pcounter.readIncrement();
     }
     catch (Exception e) {
       throw new BufMgrException(e,"BufMgr.java: read_page() failed");

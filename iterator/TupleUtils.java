@@ -25,6 +25,8 @@ public class TupleUtils
    *@param    t2        another tuple.
    *@param    t1_fld_no the field numbers in the tuples to be compared.
    *@param    t2_fld_no the field numbers in the tuples to be compared. 
+   *@param    distance  the target distance to be compared.
+   *@param    target    the target descriptor to be compared.  
    *@exception UnknowAttrType don't know the attribute type
    *@exception IOException some I/O fault
    *@exception TupleUtilsException exception from this class
@@ -34,7 +36,8 @@ public class TupleUtils
    */
   public static int CompareTupleWithTuple(AttrType fldType,
 					  Tuple  t1, int t1_fld_no,
-					  Tuple  t2, int t2_fld_no)
+					  Tuple  t2, int t2_fld_no,
+            double distance, Descriptor target)
     throws IOException,
 	   UnknowAttrType,
 	   TupleUtilsException
@@ -87,9 +90,16 @@ public class TupleUtils
     }catch (FieldNumberOutOfBoundException e){
       throw new TupleUtilsException(e, "FieldNumberOutOfBoundException is caught by TupleUtils.java");
     }
-    
-    // return the distance between 2 descriptors.
-    return t1_d.distance(t2_d);
+
+    Descriptor temp = new Descriptor(-1, -1, -1, -1, -1);
+    if(temp.equal(target) == 1){
+      dist = t1_d.distance(t2_d);
+      return (dist <= distance) ? 0 : 1;
+    } else {
+      dist1 = t1_d.distance(target);
+      dist2 = t2_d.distance(target);
+      return (dist1 == dist2) ? 0 : (dist1 < dist2) ? 1 : -1;
+    }
 	default:
 	  
 	  throw new UnknowAttrType(null, "Don't know how to handle attrSymbol, attrNull");
@@ -106,7 +116,9 @@ public class TupleUtils
    *@param    fldType   the type of the field being compared.
    *@param    t1        one tuple
    *@param    value     another tuple.
-   *@param    t1_fld_no the field numbers in the tuples to be compared.  
+   *@param    t1_fld_no the field numbers in the tuples to be compared.
+   *@param    distance  the target distance to be compared.
+   *@param    target    the target descriptor to be compared.  
    *@return   0        if the two are equal,
    *          1        if the tuple is greater,
    *         -1        if the tuple is smaller,  
@@ -116,12 +128,13 @@ public class TupleUtils
    */            
   public static int CompareTupleWithValue(AttrType fldType,
 					  Tuple  t1, int t1_fld_no,
-					  Tuple  value)
+					  Tuple  value,
+            double distance, Descriptor target)
     throws IOException,
 	   UnknowAttrType,
 	   TupleUtilsException
     {
-      return CompareTupleWithTuple(fldType, t1, t1_fld_no, value, t1_fld_no);
+      return CompareTupleWithTuple(fldType, t1, t1_fld_no, value, t1_fld_no, distance, target);
     }
   
   /**
@@ -130,22 +143,21 @@ public class TupleUtils
    * @param t2 the secocnd tuple
    * @param type[] the field types
    * @param len the field numbers
+   * @param distance the target distance to be compared.
+   * @param target the target descriptor to be compared.  
    * @return  0        if the two are not equal,
    *          1        if the two are equal,
    *@exception UnknowAttrType don't know the attribute type
    *@exception IOException some I/O fault
    *@exception TupleUtilsException exception from this class
    */            
-  
-  public static boolean Equal(Tuple t1, Tuple t2, AttrType types[], int len)
+  public static int Equal(Tuple t1, Tuple t2, AttrType types[], int len, double distance, Descriptor target)
     throws IOException,UnknowAttrType,TupleUtilsException
     {
-      int i;
-      
-      for (i = 1; i <= len; i++)
-	if (CompareTupleWithTuple(types[i-1], t1, i, t2, i) != 0)
-	  return false;
-      return true;
+      for (int i = 1; i <= len; i++)
+	     if (CompareTupleWithTuple(types[i-1], t1, i, t2, i, distance, target) != 0)
+	       return 0;
+      return 1;
     }
   
   /**
