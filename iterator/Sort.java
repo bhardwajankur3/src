@@ -80,7 +80,6 @@ public class Sort extends Iterator implements GlobalConst
     for (i=0; i<n_R_runs; i++) {
       byte[][] apage = new byte[1][];
       apage[0] = bufs[i];
-
       // need iobufs.java
       i_buf[i].init(temp_files[i], apage, 1, tuple_size, n_tuples[i]);
 
@@ -210,8 +209,8 @@ public class Sort extends Iterator implements GlobalConst
       cur_node = pcurr_Q.deq();
       if (cur_node == null) break; 
       p_elems_curr_Q --;
-      
-      comp_res = TupleUtils.CompareTupleWithValue(sortFldType, cur_node.tuple, _sort_fld, lastElem);  // need tuple_utils.java
+      Descriptor tempDesc = new Descriptor(-1, -1, -1, -1, -1);
+      comp_res = TupleUtils.CompareTupleWithValue(sortFldType, cur_node.tuple, _sort_fld, lastElem,0,tempDesc);  // need tuple_utils.java
       
       if ((comp_res < 0 && order.tupleOrder == TupleOrder.Ascending) || (comp_res > 0 && order.tupleOrder == TupleOrder.Descending)) {
 	// doesn't fit in current run, put into the other queue
@@ -491,6 +490,10 @@ public class Sort extends Iterator implements GlobalConst
       //      lastElem.setHdr(fld_no, junk, s_size);
       lastElem.setStrFld(_sort_fld, s);
       break;
+    case AttrType.attrDesc:
+      Descriptor minDesc = new Descriptor(0, 0, 0, 0, 0);
+      lastElem.setDescFld(_sort_fld,minDesc);
+      break;
     default:
       // don't know how to handle attrSymbol, attrNull
       //System.err.println("error in sort.java");
@@ -532,6 +535,10 @@ public class Sort extends Iterator implements GlobalConst
     case AttrType.attrString:
       //      lastElem.setHdr(fld_no, junk, s_size);
       lastElem.setStrFld(_sort_fld, s);
+      break;
+    case AttrType.attrDesc:
+      Descriptor maxDesc = new Descriptor(10000, 10000, 10000, 10000, 10000);
+      lastElem.setDescFld(_sort_fld,maxDesc);
       break;
     default:
       // don't know how to handle attrSymbol, attrNull
