@@ -286,7 +286,7 @@ public class Tuple implements GlobalConst{
     * @exception   FieldNumberOutOfBoundException Tuple field number out of bound
     */
 
-    public char getDescFld(int fldNo) 
+    public Descriptor getDescFld(int fldNo)
     throws IOException, FieldNumberOutOfBoundException 
     {   
        Descriptor val;
@@ -392,8 +392,8 @@ public class Tuple implements GlobalConst{
     *
     * @param	numFlds	  number of fields
     * @param	types[]	  contains the types that will be in this tuple
-    * @param	strSizes[]      contains the sizes of the string 
-    *				
+    * @param	strSizes[]      contains the sizes of the string
+    *
     * @exception IOException I/O errors
     * @exception InvalidTypeException Invalid tupe type
     * @exception InvalidTupleSizeException Tuple size too big
@@ -519,25 +519,24 @@ public void setHdr (short numFlds,  AttrType types[], short strSizes[])
   for (i=0; i< fldCnt-1; i++)
    {
     switch(type[i].attrType) {
+        case AttrType.attrInteger:
+            val = Convert.getIntValue(fldOffset[i], data);
+            System.out.print(val);
+            break;
 
-   case AttrType.attrInteger:
-     val = Convert.getIntValue(fldOffset[i], data);
-     System.out.print(val);
-     break;
+       case AttrType.attrReal:
+         fval = Convert.getFloValue(fldOffset[i], data);
+         System.out.print(fval);
+         break;
 
-   case AttrType.attrReal:
-     fval = Convert.getFloValue(fldOffset[i], data);
-     System.out.print(fval);
-     break;
+       case AttrType.attrString:
+         sval = Convert.getStrValue(fldOffset[i], data,fldOffset[i+1] - fldOffset[i]);
+         System.out.print(sval);
+         break;
 
-   case AttrType.attrString:
-     sval = Convert.getStrValue(fldOffset[i], data,fldOffset[i+1] - fldOffset[i]);
-     System.out.print(sval);
-     break;
-  
-   case AttrType.attrNull:
-   case AttrType.attrSymbol:
-     break;
+       case AttrType.attrNull:
+       case AttrType.attrSymbol:
+         break;
    }
    System.out.print(", ");
  } 
