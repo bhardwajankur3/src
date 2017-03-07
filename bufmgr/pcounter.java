@@ -1,4 +1,4 @@
-package diskmgr;
+package bufmgr;
 
 public class PCounter {
   public static int rcounter;

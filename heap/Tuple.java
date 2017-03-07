@@ -286,7 +286,7 @@ public class Tuple implements GlobalConst{
     * @exception   FieldNumberOutOfBoundException Tuple field number out of bound
     */
 
-    public Descriptor getDescFld(int fldNo)
+    public Descriptor getDescFld(int fldNo) 
     throws IOException, FieldNumberOutOfBoundException 
     {   
        Descriptor val;

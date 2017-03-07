@@ -4,7 +4,7 @@ import static java.lang.Math.sqrt;
 
 public class Descriptor {
     short[] value = new short[5];
-    Descriptor()
+    public Descriptor()
     {
         value[0] = 0;
         value[1] = 0;
@@ -12,7 +12,8 @@ public class Descriptor {
         value[3] = 0;
         value[4] = 0;
     }
-    void set(short value0, short value1, short value2, short value3, short value4) {
+
+    public void set(short value0, short value1, short value2, short value3, short value4) {
         value[0] = value0;
         value[1] = value1;
         value[2] = value2;
@@ -20,11 +21,11 @@ public class Descriptor {
         value[4] = value4;
     }
 
-    int get(int idx) {
+    public int get(int idx) {
         return value[idx];
     }
 
-    double equal (Descriptor desc) {
+    public double equal (Descriptor desc) {
         for(int i = 0; i < 5; i++){
             if(this.value[i] != desc.value[i]){
                 return 0;
@@ -33,7 +34,7 @@ public class Descriptor {
         return 1;
     }
 
-    double distance (Descriptor desc) {
+    public double distance (Descriptor desc) {
         int dist = 0;
         for(int i = 0; i < 5; i++){
             dist = dist + ((this.value[i] - desc.value[i]) * (this.value[i] - desc.value[i]));

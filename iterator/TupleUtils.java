@@ -45,7 +45,7 @@ public class TupleUtils
       int   t1_i,  t2_i;
       float t1_r,  t2_r;
       String t1_s, t2_s;
-      Descriptor t1_d, t1_d;
+      Descriptor t1_d, t2_d;
       
       switch (fldType.attrType) 
 	{
@@ -91,13 +91,14 @@ public class TupleUtils
       throw new TupleUtilsException(e, "FieldNumberOutOfBoundException is caught by TupleUtils.java");
     }
 
-    Descriptor temp = new Descriptor(-1, -1, -1, -1, -1);
+    Descriptor temp = new Descriptor();
+    temp.set(-1, -1, -1, -1, -1);
     if(temp.equal(target) == 1){
-      dist = t1_d.distance(t2_d);
+      double dist = t1_d.distance(t2_d);
       return (dist <= distance) ? 0 : 1;
     } else {
-      dist1 = t1_d.distance(target);
-      dist2 = t2_d.distance(target);
+      double dist1 = t1_d.distance(target);
+      double dist2 = t2_d.distance(target);
       return (dist1 == dist2) ? 0 : (dist1 < dist2) ? 1 : -1;
     }
 	default:

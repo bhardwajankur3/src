@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 import diskmgr.*;
 import global.*;
- 
+
 
 /** A frame description class. It describes each page in the buffer
  * pool, the page number in the file, whether it is dirty or not,
@@ -332,7 +332,7 @@ public class BufMgr implements GlobalConst{
   private Replacer replacer;
 
   /** The pcounter object, which is only used in this class. */
-  private PCounter counter;
+  private PCounter pcounter;
   
   /** Factor out the common code for the two versions of Flush 
    *
